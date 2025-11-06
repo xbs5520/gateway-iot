@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gateway 监控系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Gateway 视频监控系统</h1>
+        
+        <div class="grid">
+            <!-- 左侧：视频流 -->
+            <div class="box video-box">
+                <h2>📡 实时视频流</h2>
+                <span class="status">● 在线</span>
+                    <div class="video-container">
+                        <img id="stream" src="/snapshot.jpg" alt="实时视频流">
+                    </div>
+
+                    <script>
+                        // 每200ms刷新一次图片（5fps）
+                        setInterval(() => {
+                            const img = document.getElementById('stream');
+                            img.src = '/snapshot.jpg?' + Date.now();  // 加时间戳防止缓存
+                        }, 200);
+                    </script>
+            </div>
+            
+            <!-- 右侧：系统信息 -->
+            <div class="box info-box">
+                <h2>ℹ️ 系统信息</h2>
+                <div class="info-item">
+                    <strong>服务器端口:</strong> 8080
+                </div>
+                <div class="info-item">
+                    <strong>流协议:</strong> MJPEG over HTTP
+                </div>
+                <div class="info-item">
+                    <strong>检测状态:</strong> 运行中
+                </div>
+                <div class="info-item" id="stats">
+                    <strong>事件统计:</strong> 加载中...
+                </div>
+                
+                <a href="/config.html" class="btn" style="margin-bottom: 10px;">⚙️ 配置管理</a>
+                <a href="/events.html" class="btn">📋 查看检测事件</a>
+            </div>
+        </div>
+        
+        <div class="box">
+            <h2>💡 使用说明</h2>
+            <p>
+                • 上方显示实时视频流，自动刷新<br>
+                • 系统自动检测运动并保存事件<br>
+                • 点击"查看检测事件"查看历史记录<br>
+                • 事件缩略图保存在 ./events/ 目录
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // 获取统计信息
+        fetch('/api/stats')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('stats').innerHTML = 
+                    '<strong>事件统计:</strong> 总计 ' + data.total + ' 个事件';
+            });
+        
+        // 每5秒刷新一次统计
+        setInterval(() => {
+            fetch('/api/stats')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('stats').innerHTML = 
+                        '<strong>事件统计:</strong> 总计 ' + data.total + ' 个事件';
+                });
+        }, 5000);
+    </script>
+</body>
+</html>

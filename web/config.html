@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>配置管理 - Gateway</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .config-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .config-item {
+            margin-bottom: 15px;
+        }
+        .config-item label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .config-item input,
+        .config-item select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .config-item input:focus,
+        .config-item select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        .config-item small {
+            display: block;
+            color: #666;
+            margin-top: 3px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-save {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1;
+        }
+        .btn-save:hover {
+            background: #45a049;
+        }
+        .btn-reset {
+            background: #f44336;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-reset:hover {
+            background: #da190b;
+        }
+        .message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/index.html" class="back-link">← 返回首页</a>
+        
+        <h1>⚙️ 配置管理</h1>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="configForm">
+            <!-- 运动检测配置 -->
+            <div class="config-section">
+                <h2>🎯 运动检测配置</h2>
+                <div class="config-item">
+                    <label for="motion_level">灵敏度级别 (1-10):</label>
+                    <input type="range" id="motion_level" name="motion_level" min="1" max="10" value="5">
+                    <span id="motion_level_value">5</span>
+                    <small>级别越高，越容易触发检测（1=最不敏感，10=最敏感）</small>
+                </div>
+                <div class="config-item">
+                    <label for="debounce">防抖时间（秒）:</label>
+                    <input type="number" id="debounce" name="debounce" min="1" max="60" value="3">
+                    <small>两次检测之间的最小间隔时间</small>
+                </div>
+            </div>
+            
+            <!-- RTSP配置 -->
+            <div class="config-section">
+                <h2>📡 RTSP 流配置</h2>
+                <div class="config-item">
+                    <label for="rtsp_url">RTSP URL:</label>
+                    <input type="text" id="rtsp_url" name="rtsp_url" value="rtsp://127.0.0.1:8554/phone">
+                    <small>视频源地址</small>
+                </div>
+                <div class="config-item">
+                    <label for="reconnect_interval">重连间隔（秒）:</label>
+                    <input type="number" id="reconnect_interval" name="reconnect_interval" min="1" max="60" value="5">
+                    <small>连接失败后重试的间隔时间</small>
+                </div>
+            </div>
+            
+            <!-- HTTP服务器配置 -->
+            <div class="config-section">
+                <h2>🌐 HTTP 服务器配置</h2>
+                <div class="config-item">
+                    <label for="http_port">端口:</label>
+                    <input type="number" id="http_port" name="http_port" min="1024" max="65535" value="8080">
+                    <small>HTTP服务器监听端口（修改需要重启）</small>
+                </div>
+                <div class="config-item">
+                    <label for="stream_quality">流质量 (1-100):</label>
+                    <input type="range" id="stream_quality" name="stream_quality" min="1" max="100" value="70">
+                    <span id="stream_quality_value">70</span>
+                    <small>JPEG压缩质量（越高画质越好，但占用带宽越大）</small>
+                </div>
+                <div class="config-item">
+                    <label for="stream_fps">流帧率 (FPS):</label>
+                    <input type="number" id="stream_fps" name="stream_fps" min="1" max="30" value="10">
+                    <small>每秒传输的帧数</small>
+                </div>
+            </div>
+            
+            <!-- MQTT配置 -->
+            <div class="config-section">
+                <h2>📤 MQTT 配置</h2>
+                <div class="config-item">
+                    <label for="mqtt_enabled">启用 MQTT:</label>
+                    <select id="mqtt_enabled" name="mqtt_enabled">
+                        <option value="true">是</option>
+                        <option value="false">否</option>
+                    </select>
+                </div>
+                <div class="config-item">
+                    <label for="mqtt_endpoint">MQTT 端点:</label>
+                    <input type="text" id="mqtt_endpoint" name="mqtt_endpoint" value="">
+                    <small>AWS IoT 或其他MQTT服务器地址</small>
+                </div>
+                <div class="config-item">
+                    <label for="mqtt_port">MQTT 端口:</label>
+                    <input type="number" id="mqtt_port" name="mqtt_port" min="1" max="65535" value="8883">
+                </div>
+                <div class="config-item">
+                    <label for="mqtt_client_id">客户端 ID:</label>
+                    <input type="text" id="mqtt_client_id" name="mqtt_client_id" value="imx6ull_device">
+                </div>
+            </div>
+            
+            <!-- 事件管理配置 -->
+            <div class="config-section">
+                <h2>📁 事件管理配置</h2>
+                <div class="config-item">
+                    <label for="save_dir">保存目录:</label>
+                    <input type="text" id="save_dir" name="save_dir" value="./events">
+                    <small>事件图片保存路径</small>
+                </div>
+                <div class="config-item">
+                    <label for="max_history">最大历史记录:</label>
+                    <input type="number" id="max_history" name="max_history" min="10" max="10000" value="100">
+                    <small>保留的最大事件数量</small>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="btn-save">💾 保存配置</button>
+                <button type="button" class="btn-reset" onclick="loadConfig()">🔄 重置</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // 页面加载时获取当前配置
+        window.onload = function() {
+            loadConfig();
+            
+            // 添加滑块值显示
+            document.getElementById('motion_level').oninput = function() {
+                document.getElementById('motion_level_value').textContent = this.value;
+            };
+            document.getElementById('stream_quality').oninput = function() {
+                document.getElementById('stream_quality_value').textContent = this.value;
+            };
+        };
+        
+        // 加载配置
+        function loadConfig() {
+            fetch('/api/config')
+                .then(res => res.json())
+                .then(config => {
+                    // 填充表单
+                    if(config.detector) {
+                        document.getElementById('motion_level').value = config.detector.motion_level || 5;
+                        document.getElementById('motion_level_value').textContent = config.detector.motion_level || 5;
+                        document.getElementById('debounce').value = config.detector.debounce || 3;
+                    }
+                    
+                    if(config.rtsp) {
+                        document.getElementById('rtsp_url').value = config.rtsp.url || '';
+                        document.getElementById('reconnect_interval').value = config.rtsp.reconnect_interval || 5;
+                    }
+                    
+                    if(config.http) {
+                        document.getElementById('http_port').value = config.http.port || 8080;
+                        document.getElementById('stream_quality').value = config.http.stream_quality || 70;
+                        document.getElementById('stream_quality_value').textContent = config.http.stream_quality || 70;
+                        document.getElementById('stream_fps').value = config.http.stream_fps || 10;
+                    }
+                    
+                    if(config.mqtt) {
+                        document.getElementById('mqtt_enabled').value = config.mqtt.enabled ? 'true' : 'false';
+                        document.getElementById('mqtt_endpoint').value = config.mqtt.endpoint || '';
+                        document.getElementById('mqtt_port').value = config.mqtt.port || 8883;
+                        document.getElementById('mqtt_client_id').value = config.mqtt.client_id || '';
+                    }
+                    
+                    if(config.event) {
+                        document.getElementById('save_dir').value = config.event.save_dir || './events';
+                        document.getElementById('max_history').value = config.event.max_history || 100;
+                    }
+                    
+                    showMessage('配置加载成功', 'success');
+                })
+                .catch(err => {
+                    showMessage('配置加载失败: ' + err.message, 'error');
+                });
+        }
+        
+        // 保存配置
+        document.getElementById('configForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            // 构建配置对象
+            const config = {
+                detector: {
+                    motion_level: parseInt(document.getElementById('motion_level').value),
+                    debounce: parseInt(document.getElementById('debounce').value)
+                },
+                rtsp: {
+                    url: document.getElementById('rtsp_url').value,
+                    reconnect_interval: parseInt(document.getElementById('reconnect_interval').value)
+                },
+                http: {
+                    port: parseInt(document.getElementById('http_port').value),
+                    stream_quality: parseInt(document.getElementById('stream_quality').value),
+                    stream_fps: parseInt(document.getElementById('stream_fps').value),
+                    stream_resolution: {
+                        width: 640,
+                        height: 480
+                    }
+                },
+                mqtt: {
+                    enabled: document.getElementById('mqtt_enabled').value === 'true',
+                    endpoint: document.getElementById('mqtt_endpoint').value,
+                    port: parseInt(document.getElementById('mqtt_port').value),
+                    client_id: document.getElementById('mqtt_client_id').value,
+                    cert_ca: "./cert/imx_ca.pem",
+                    cert_crt: "./cert/imx_certificate.pem.crt",
+                    cert_key: "./cert/imx_private.pem.key"
+                },
+                event: {
+                    save_dir: document.getElementById('save_dir').value,
+                    max_history: parseInt(document.getElementById('max_history').value)
+                }
+            };
+            
+            // 发送到后端
+            fetch('/api/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    showMessage('✅ 配置保存成功！', 'success');
+                } else {
+                    showMessage('❌ 配置保存失败: ' + (data.error || '未知错误'), 'error');
+                }
+            })
+            .catch(err => {
+                showMessage('❌ 配置保存失败: ' + err.message, 'error');
+            });
+        };
+        
+        // 显示消息
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = 'message ' + type;
+            msg.style.display = 'block';
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
