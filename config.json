@@ -1,7 +1,7 @@
 {
     "rtsp": 
     {
-        "url": "rtsp://127.0.0.1:8554/phone",
+        "url": "rtsp://127.0.0.1:8554/dji_camera",
         "reconnect_interval": 5
     },
     "http": 
