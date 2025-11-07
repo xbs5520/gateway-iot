@@ -57,7 +57,7 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ### Stream flow
 
-<img src="README/streamflow.png" alt="stream flow" style="zoom: 67%;" />
+<img src="README/Streamflow.png" alt="stream flow" style="zoom: 67%;" />
 
 
 
