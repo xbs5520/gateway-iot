@@ -10,23 +10,23 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ### build
 
-<img src="readme/build.png" alt="build" style="zoom: 67%;" />
+<img src="README/build.png" alt="build" style="zoom: 67%;" />
 
 ### Main Page
 
-<img src="readme/mainpage.png" alt="main page" style="zoom: 67%;" />
+<img src="README/mainpage.png" alt="main page" style="zoom: 67%;" />
 
 ### configuration page
 
-<img src="readme/configuration.png" alt="configuration" style="zoom: 67%;" />
+<img src="README/configuration.png" alt="configuration" style="zoom: 67%;" />
 
 ### Motion Detect
 
-<img src="readme/motiondetect.png" alt="motiondetect" style="zoom: 67%;" />
+<img src="README/motiondetect.png" alt="motiondetect" style="zoom: 67%;" />
 
 ### AWS IOT Publish
 
-<img src="readme/awspublish.png" alt="awspublish" style="zoom: 67%;" />
+<img src="README/awspublish.png" alt="awspublish" style="zoom: 67%;" />
 
 
 
@@ -49,15 +49,15 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ### Configuration flow
 
-<img src="readme/configflow.png" alt="config flow" style="zoom: 67%;" />
+<img src="README/configflow.png" alt="config flow" style="zoom: 67%;" />
 
 ### Network flow
 
-<img src="readme/Networkflow.png" alt="Network flow" style="zoom: 67%;" />
+<img src="README/Networkflow.png" alt="Network flow" style="zoom: 67%;" />
 
 ### Stream flow
 
-<img src="readme/streamflow.png" alt="stream flow" style="zoom: 67%;" />
+<img src="README/streamflow.png" alt="stream flow" style="zoom: 67%;" />
 
 
 
@@ -65,7 +65,7 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 **motion detect**
 
-<img src="readme/Motiondetectflow.png" alt="Motion detect flow" style="zoom: 67%;" />
+<img src="README/Motiondetectflow.png" alt="Motion detect flow" style="zoom: 67%;" />
 
 ## Module Overview
 
