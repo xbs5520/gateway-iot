@@ -49,7 +49,7 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ### Configuration flow
 
-<img src="README/configflow.png" alt="config flow" style="zoom: 67%;" />
+<img src="README/Configflow.png" alt="config flow" style="zoom: 67%;" />
 
 ### Network flow
 
