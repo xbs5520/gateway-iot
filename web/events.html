@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>检测事件 - Gateway</title>
+    <title>Detection Events - Gateway</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="container">
-        <a href="/" class="back-btn">← 返回主页</a>
-        <h1>📋 检测事件历史</h1>
+        <a href="/" class="back-btn">← Back to Home</a>
+        <h1>📋 Detection Event History</h1>
         
         <div class="events-grid" id="events-grid">
-            <p>加载中...</p>
+            <p>Loading...</p>
         </div>
     </div>
     
     <script>
-        // 获取事件列表
+        // Get event list
         fetch('/api/events')
             .then(res => res.json())
             .then(events => {
                 const grid = document.getElementById('events-grid');
-                grid.innerHTML = '';  // 清空"加载中"
+                grid.innerHTML = '';  // Clear "Loading..."
                 
                 if(events.length === 0) {
-                    grid.innerHTML = '<p>暂无检测事件</p>';
+                    grid.innerHTML = '<p>No detection events yet</p>';
                     return;
                 }
                 
-                // 倒序显示（最新的在前面）
+                // Reverse order (newest first)
                 events.reverse().forEach(event => {
                     const card = document.createElement('div');
                     card.className = 'event-card';
                     
                     card.innerHTML = `
-                        <img src="/api/thumbnail/${event.filename}" alt="事件">
+                        <img src="/api/thumbnail/${event.filename}" alt="Event">
                         <div class="event-info">
-                            <span class="event-type">🚨 运动检测</span>
+                            <span class="event-type">🚨 Motion Detected</span>
                             <div class="event-time">${event.filename}</div>
                         </div>
                     `;
@@ -47,7 +47,7 @@
             })
             .catch(err => {
                 document.getElementById('events-grid').innerHTML = 
-                    '<p>加载失败: ' + err + '</p>';
+                    '<p>Loading failed: ' + err + '</p>';
             });
     </script>
 </body>

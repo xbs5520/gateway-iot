@@ -8,6 +8,26 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ## Demo
 
+### build
+
+<img src="readme/build.png" alt="build" style="zoom: 67%;" />
+
+### Main Page
+
+<img src="readme/mainpage.png" alt="main page" style="zoom: 67%;" />
+
+### configuration page
+
+<img src="readme/configuration.png" alt="configuration" style="zoom: 67%;" />
+
+### Motion Detect
+
+<img src="readme/motiondetect.png" alt="motiondetect" style="zoom: 67%;" />
+
+### AWS IOT Publish
+
+<img src="readme/awspublish.png" alt="awspublish" style="zoom: 67%;" />
+
 
 
 ## Features
@@ -24,21 +44,20 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 - Existing open-source video gateways are often hard to configure, lack cloud integration, or are not optimized for edge devices.
 - I needed a lightweight, modular, and easily extensible system for real-time video analytics and event-driven IoT applications.
 - This project provides a modern C++17 codebase with clear architecture, dynamic configuration, and seamless integration with AWS IoT and web dashboards.
-- 
 
 ## Architecture
 
 ### Configuration flow
 
-<img src="README/Configflow.png" alt="config flow" style="zoom: 67%;" />
+<img src="readme/configflow.png" alt="config flow" style="zoom: 67%;" />
 
 ### Network flow
 
-<img src="README/Networkflow.png" alt="Network flow" style="zoom: 67%;" />
+<img src="readme/Networkflow.png" alt="Network flow" style="zoom: 67%;" />
 
 ### Stream flow
 
-<img src="README/Streamflow.png" alt="stream flow" style="zoom: 67%;" />
+<img src="readme/streamflow.png" alt="stream flow" style="zoom: 67%;" />
 
 
 
@@ -46,7 +65,7 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 **motion detect**
 
-<img src="README/Motiondetectflow.png" alt="Motion detect flow" style="zoom: 67%;" />
+<img src="readme/Motiondetectflow.png" alt="Motion detect flow" style="zoom: 67%;" />
 
 ## Module Overview
 

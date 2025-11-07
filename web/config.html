@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>配置管理 - Gateway</title>
+    <title>Configuration - Gateway</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/style.css">
@@ -98,118 +98,118 @@
 </head>
 <body>
     <div class="container">
-        <a href="/index.html" class="back-link">← 返回首页</a>
+        <a href="/index.html" class="back-link">← Back to Home</a>
         
-        <h1>⚙️ 配置管理</h1>
+        <h1>⚙️ Configuration Management</h1>
         
         <div id="message" class="message"></div>
         
         <form id="configForm">
-            <!-- 运动检测配置 -->
+            <!-- Motion Detection Config -->
             <div class="config-section">
-                <h2>🎯 运动检测配置</h2>
+                <h2>🎯 Motion Detection Configuration</h2>
                 <div class="config-item">
-                    <label for="motion_level">灵敏度级别 (1-10):</label>
+                    <label for="motion_level">Sensitivity Level (1-10):</label>
                     <input type="range" id="motion_level" name="motion_level" min="1" max="10" value="5">
                     <span id="motion_level_value">5</span>
-                    <small>级别越高，越容易触发检测（1=最不敏感，10=最敏感）</small>
+                    <small>Higher level = more sensitive (1=least, 10=most)</small>
                 </div>
                 <div class="config-item">
-                    <label for="debounce">防抖时间（秒）:</label>
+                    <label for="debounce">Debounce Time (seconds):</label>
                     <input type="number" id="debounce" name="debounce" min="1" max="60" value="3">
-                    <small>两次检测之间的最小间隔时间</small>
+                    <small>Minimum interval between detections</small>
                 </div>
             </div>
             
-            <!-- RTSP配置 -->
+            <!-- RTSP Config -->
             <div class="config-section">
-                <h2>📡 RTSP 流配置</h2>
+                <h2>📡 RTSP Stream Configuration</h2>
                 <div class="config-item">
                     <label for="rtsp_url">RTSP URL:</label>
                     <input type="text" id="rtsp_url" name="rtsp_url" value="rtsp://127.0.0.1:8554/phone">
-                    <small>视频源地址</small>
+                    <small>Video source address</small>
                 </div>
                 <div class="config-item">
-                    <label for="reconnect_interval">重连间隔（秒）:</label>
+                    <label for="reconnect_interval">Reconnect Interval (seconds):</label>
                     <input type="number" id="reconnect_interval" name="reconnect_interval" min="1" max="60" value="5">
-                    <small>连接失败后重试的间隔时间</small>
+                    <small>Retry interval after connection failure</small>
                 </div>
             </div>
             
-            <!-- HTTP服务器配置 -->
+            <!-- HTTP Server Config -->
             <div class="config-section">
-                <h2>🌐 HTTP 服务器配置</h2>
+                <h2>🌐 HTTP Server Configuration</h2>
                 <div class="config-item">
-                    <label for="http_port">端口:</label>
+                    <label for="http_port">Port:</label>
                     <input type="number" id="http_port" name="http_port" min="1024" max="65535" value="8080">
-                    <small>HTTP服务器监听端口（修改需要重启）</small>
+                    <small>HTTP server listening port (requires restart)</small>
                 </div>
                 <div class="config-item">
-                    <label for="stream_quality">流质量 (1-100):</label>
+                    <label for="stream_quality">Stream Quality (1-100):</label>
                     <input type="range" id="stream_quality" name="stream_quality" min="1" max="100" value="70">
                     <span id="stream_quality_value">70</span>
-                    <small>JPEG压缩质量（越高画质越好，但占用带宽越大）</small>
+                    <small>JPEG compression quality (higher = better quality, more bandwidth)</small>
                 </div>
                 <div class="config-item">
-                    <label for="stream_fps">流帧率 (FPS):</label>
+                    <label for="stream_fps">Stream FPS:</label>
                     <input type="number" id="stream_fps" name="stream_fps" min="1" max="30" value="10">
-                    <small>每秒传输的帧数</small>
+                    <small>Frames per second</small>
                 </div>
             </div>
             
-            <!-- MQTT配置 -->
+            <!-- MQTT Config -->
             <div class="config-section">
-                <h2>📤 MQTT 配置</h2>
+                <h2>📤 MQTT Configuration</h2>
                 <div class="config-item">
-                    <label for="mqtt_enabled">启用 MQTT:</label>
+                    <label for="mqtt_enabled">Enable MQTT:</label>
                     <select id="mqtt_enabled" name="mqtt_enabled">
-                        <option value="true">是</option>
-                        <option value="false">否</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </select>
                 </div>
                 <div class="config-item">
-                    <label for="mqtt_endpoint">MQTT 端点:</label>
+                    <label for="mqtt_endpoint">MQTT Endpoint:</label>
                     <input type="text" id="mqtt_endpoint" name="mqtt_endpoint" value="">
-                    <small>AWS IoT 或其他MQTT服务器地址</small>
+                    <small>AWS IoT or other MQTT broker address</small>
                 </div>
                 <div class="config-item">
-                    <label for="mqtt_port">MQTT 端口:</label>
+                    <label for="mqtt_port">MQTT Port:</label>
                     <input type="number" id="mqtt_port" name="mqtt_port" min="1" max="65535" value="8883">
                 </div>
                 <div class="config-item">
-                    <label for="mqtt_client_id">客户端 ID:</label>
+                    <label for="mqtt_client_id">Client ID:</label>
                     <input type="text" id="mqtt_client_id" name="mqtt_client_id" value="imx6ull_device">
                 </div>
             </div>
             
-            <!-- 事件管理配置 -->
+            <!-- Event Management Config -->
             <div class="config-section">
-                <h2>📁 事件管理配置</h2>
+                <h2>📁 Event Management Configuration</h2>
                 <div class="config-item">
-                    <label for="save_dir">保存目录:</label>
+                    <label for="save_dir">Save Directory:</label>
                     <input type="text" id="save_dir" name="save_dir" value="./events">
-                    <small>事件图片保存路径</small>
+                    <small>Event image storage path</small>
                 </div>
                 <div class="config-item">
-                    <label for="max_history">最大历史记录:</label>
+                    <label for="max_history">Max History:</label>
                     <input type="number" id="max_history" name="max_history" min="10" max="10000" value="100">
-                    <small>保留的最大事件数量</small>
+                    <small>Maximum number of events to keep</small>
                 </div>
             </div>
             
             <div class="btn-group">
-                <button type="submit" class="btn-save">💾 保存配置</button>
-                <button type="button" class="btn-reset" onclick="loadConfig()">🔄 重置</button>
+                <button type="submit" class="btn-save">💾 Save Configuration</button>
+                <button type="button" class="btn-reset" onclick="loadConfig()">🔄 Reset</button>
             </div>
         </form>
     </div>
     
     <script>
-        // 页面加载时获取当前配置
+        // Load current configuration on page load
         window.onload = function() {
             loadConfig();
             
-            // 添加滑块值显示
+            // Add slider value display
             document.getElementById('motion_level').oninput = function() {
                 document.getElementById('motion_level_value').textContent = this.value;
             };
@@ -218,12 +218,12 @@
             };
         };
         
-        // 加载配置
+        // Load configuration
         function loadConfig() {
             fetch('/api/config')
                 .then(res => res.json())
                 .then(config => {
-                    // 填充表单
+                    // Fill form
                     if(config.detector) {
                         document.getElementById('motion_level').value = config.detector.motion_level || 5;
                         document.getElementById('motion_level_value').textContent = config.detector.motion_level || 5;
@@ -254,18 +254,18 @@
                         document.getElementById('max_history').value = config.event.max_history || 100;
                     }
                     
-                    showMessage('配置加载成功', 'success');
+                    showMessage('Configuration loaded successfully', 'success');
                 })
                 .catch(err => {
-                    showMessage('配置加载失败: ' + err.message, 'error');
+                    showMessage('Failed to load configuration: ' + err.message, 'error');
                 });
         }
         
-        // 保存配置
+        // Save configuration
         document.getElementById('configForm').onsubmit = function(e) {
             e.preventDefault();
             
-            // 构建配置对象
+            // Build config object
             const config = {
                 detector: {
                     motion_level: parseInt(document.getElementById('motion_level').value),
@@ -299,7 +299,7 @@
                 }
             };
             
-            // 发送到后端
+            // Send to backend
             fetch('/api/config', {
                 method: 'POST',
                 headers: {
@@ -310,24 +310,24 @@
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
-                    showMessage('✅ 配置保存成功！', 'success');
+                    showMessage('✅ Configuration saved successfully!', 'success');
                 } else {
-                    showMessage('❌ 配置保存失败: ' + (data.error || '未知错误'), 'error');
+                    showMessage('❌ Failed to save configuration: ' + (data.error || 'Unknown error'), 'error');
                 }
             })
             .catch(err => {
-                showMessage('❌ 配置保存失败: ' + err.message, 'error');
+                showMessage('❌ Failed to save configuration: ' + err.message, 'error');
             });
         };
         
-        // 显示消息
+        // Show message
         function showMessage(text, type) {
             const msg = document.getElementById('message');
             msg.textContent = text;
             msg.className = 'message ' + type;
             msg.style.display = 'block';
             
-            // 3秒后自动隐藏
+            // Auto hide after 3 seconds
             setTimeout(() => {
                 msg.style.display = 'none';
             }, 3000);
