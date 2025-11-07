@@ -30,15 +30,15 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ### Configuration flow
 
-<img src="readme/configflow.png" alt="config flow" style="zoom: 67%;" />
+<img src="README/Configflow.png" alt="config flow" style="zoom: 67%;" />
 
 ### Network flow
 
-<img src="readme/Networkflow.png" alt="Network flow" style="zoom: 67%;" />
+<img src="README/Networkflow.png" alt="Network flow" style="zoom: 67%;" />
 
 ### Stream flow
 
-<img src="readme/streamflow.png" alt="stream flow" style="zoom: 67%;" />
+<img src="README/Streamflow.png" alt="stream flow" style="zoom: 67%;" />
 
 
 
@@ -46,7 +46,7 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 **motion detect**
 
-<img src="readme/Motiondetectflow.png" alt="Motion detect flow" style="zoom: 67%;" />
+<img src="README/Motiondetectflow.png" alt="Motion detect flow" style="zoom: 67%;" />
 
 ## Module Overview
 
