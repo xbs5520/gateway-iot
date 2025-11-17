@@ -24,10 +24,10 @@
                         setInterval(() => {
                             const img = document.getElementById('stream');
                             img.src = '/snapshot.jpg?' + Date.now();  // Timestamp to prevent cache
-                        }, 200);
+                        }, 40);
                     </script>
             </div>
-            
+ 
             <!-- Right: System Info -->
             <div class="box info-box">
                 <h2>ℹ️ System Information</h2>
@@ -35,7 +35,7 @@
                     <strong>Server Port:</strong> 8080
                 </div>
                 <div class="info-item">
-                    <strong>Stream Protocol:</strong> MJPEG over HTTP
+                    <strong>Stream Protocol:</strong> snapshot over HTTP
                 </div>
                 <div class="info-item">
                     <strong>Detection Status:</strong> Running

@@ -241,19 +241,51 @@ Solution:
 
 ## Roadmap
 
-**Planned Features:**
+**Plan:**
 
--  **Enhanced Web Configuration** - More granular settings for detection, networking, and storage
--  **Face Recognition** - Integrate face detection and recognition using OpenCV DNN or dlib
--  **Database Integration** - Store events and analytics in PostgreSQL/MySQL
--  **Web UI Improvements** - Real-time WebSocket streaming, responsive design, dashboard charts
--  **Extended AWS Integration** - CloudWatch metrics, Lambda triggers, S3 image storage
--  **OTA Updates** - Remote firmware/configuration updates via MQTT
--  **Multi-camera Support** - Handle multiple video sources simultaneously
--  **H.264 Recording** - Continuous or event-triggered video recording to disk
--  **ARM Cross-compilation** - Optimized build for IMX6ULL and Raspberry Pi
--  **Alert Notifications** - Email/SMS/push notifications on events
--  **AI Analytics** - Object detection, people counting, behavior analysis
+### Phase 0: Foundation & Documentation
+- 📝 OpenAPI 3.0 specification with Swagger UI
+- 🧪 Google Test framework integration
+- 🔄 CI/CD pipeline with GitHub Actions
+- 📊 Code coverage and static analysis tools
+
+### Phase 1: Docker Containerization
+- 🐳 Multi-stage Dockerfile with optimized image size
+- 🎛️ docker-compose orchestration
+- 🌐 Environment-based configuration (12-factor app)
+- 📦 Automated Docker Hub publishing
+
+### Phase 2: Advanced Testing & Logging
+- 📜 Structured logging system with rotation
+- 👁️ Configuration hot reload (inotify-based)
+- 🌐 Web-based log viewer
+- ✅ Enhanced validation pipeline
+
+### Phase 3: Multi-Camera Support
+- 📹 Dynamic camera management via API
+- 🔀 Thread pool for concurrent stream processing
+- 🖼️ Multi-grid web UI (2x2/3x3 layout)
+- 🎯 Per-camera motion detection and statistics
+
+### Phase 4: Cloud-Native Observability
+- 📈 Prometheus metrics endpoint
+- 📊 Grafana dashboard with custom visualizations
+- 🚨 Alerting and threshold monitoring
+- 📉 System and business metrics tracking
+
+### Phase 5: Data Persistence & Cloud Storage
+- 💾 SQLite database for event metadata
+- 🔍 Query API with filtering and aggregation
+- ☁️ AWS S3 automatic backup
+- 🔒 IAM roles and lifecycle policies
+
+**Future Enhancements:**
+- 🤖 Edge AI with TensorFlow Lite
+- 🔔 Email/SMS/webhook notifications
+- 🎥 H.264 continuous recording
+- 🔐 JWT authentication and RBAC
+
+**Contributions welcome!**
 
 **Contributions welcome!**
 

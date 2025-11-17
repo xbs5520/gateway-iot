@@ -45,12 +45,13 @@ void HTTPServer::serverThread()
 
 void HTTPServer::setupRoutes()
 {
-    // 1. set static dir
+    // 1. set static dir /html /css /js
     m_server->set_mount_point("/", "./web");
 
-    // 2. 单帧快照接口（替代MJPEG）
+    // 2. snapshot API
     m_server->Get("/snapshot.jpg", [this](const httplib::Request&, httplib::Response& res) 
     {
+        // mutex？
         cv::Mat frame = m_client->getLatestFrame();
         if(!frame.empty()) 
         {
@@ -69,55 +70,12 @@ void HTTPServer::setupRoutes()
             res.set_content("No frame available", "text/plain");
         }
     });
-
-    // // 2. MJPEG stream
-    // m_server->Get("/stream.mjpeg", [this](const httplib::Request&, httplib::Response& res) 
-    // {
-    //     // multipart/x-mixed-replace  -- mjpeg
-    //     res.set_header("Content-Type", "multipart/x-mixed-replace; boundary=frame");
-    //     res.set_header("Cache-Control", "no-cache");    // no cache
-    //     // send data
-    //     res.set_content_provider(
-    //         "multipart/x-mixed-replace; boundary=frame",
-    //         [this](size_t offset, httplib::DataSink& sink) 
-    //         {
-    //             while(m_running) 
-    //             {
-    //                 cv::Mat frame = m_client->getLatestFrame();
-    //             if(!frame.empty()) 
-    //             {
-    //                 // ===== 添加：缩小分辨率 =====
-    //                 cv::Mat resized;
-    //                 cv::resize(frame, resized, cv::Size(640, 480));  // 缩小到640x480
-                    
-    //                 // ===== 修改：降低JPEG质量 =====
-    //                 std::vector<uchar> buf;
-    //                 std::vector<int> params = {cv::IMWRITE_JPEG_QUALITY, 50};  // 质量60（默认95）
-    //                 cv::imencode(".jpg", resized, buf, params);
-                    
-    //                 std::string boundary = "--frame\r\n";
-    //                 std::string content_type = "Content-Type: image/jpeg\r\n";
-    //                 std::string content_length = "Content-Length: " + std::to_string(buf.size()) + "\r\n\r\n";
-                    
-    //                 sink.write(boundary.c_str(), boundary.size());
-    //                 sink.write(content_type.c_str(), content_type.size());
-    //                 sink.write(content_length.c_str(), content_length.size());
-    //                 sink.write((char*)buf.data(), buf.size());
-    //                 sink.write("\r\n", 2);
-    //             }
-    //                 // 100ms
-    //                 std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    //             }
-    //             return true;
-    //         }
-    //     );
-    // });
     
     // 3. events
     m_server->Get("/api/events", [this](const httplib::Request&, httplib::Response& res) 
     {
         std::string json = "[";
-        namespace fs = std::filesystem;  // C++17 filesystem
+        namespace fs = std::filesystem;
         if(fs::exists("./events"))  // 如果events目录存在
         {
             bool first = true;
@@ -128,14 +86,14 @@ void HTTPServer::setupRoutes()
                 if(entry.path().extension() == ".jpg") 
                 {
                     if(!first) json += ",";  // 不是第一个就加逗号
-                    // 添加文件名到JSON
+                    // add filename to json
                     std::string filename = entry.path().filename().string();
                     json += "{\"filename\":\"" + filename + "\"}";
                     first = false;
                 }
             }
         }
-        json += "]";  // JSON数组结束
+        json += "]";  // json end
         
         // 返回JSON字符串，Content-Type设置为application/json
         res.set_content(json, "application/json");
@@ -167,11 +125,11 @@ void HTTPServer::setupRoutes()
         }
     });
 
-    // 5. API: 获取事件统计
+    // 5. API: 获取事件个数
     m_server->Get("/api/stats", [this](const httplib::Request&, httplib::Response& res) 
     {
         // 用 getRecentEvents
-        auto events = m_eventMgr->getRecentEvents(10);  // 获取最多1000个
+        auto events = m_eventMgr->getRecentEvents(10);  // 获取最多10个
         
         std::string json = "{";
         json += "\"total\": " + std::to_string(events.size());
@@ -221,8 +179,6 @@ void HTTPServer::setupRoutes()
                 error_msg += name + " 验证失败; ";
                 cJSON_Delete(value);
             }
-            // setConfig内部会duplicate，所以这里要释放
-            
             item = item->next;
         }
         
