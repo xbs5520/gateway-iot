@@ -322,3 +322,11 @@ Contributions are welcome! Here's how you can help:
 - Reference any related issues
 - Ensure code compiles without warnings
 - Update documentation if needed
+
+## Third-Party Libraries
+
+- [cpp-httplib](https://github.com/yhirose/cpp-httplib) - MIT License
+- OpenCV
+- FFmpeg
+- Mosquitto (Eclipse Mosquitto)
+- cJSON

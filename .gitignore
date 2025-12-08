@@ -43,7 +43,7 @@ CTestTestfile.cmake
 Makefile
 
 # Dependencies (use git submodule instead)
-external/
+#external/
 
 # OS
 .DS_Store
