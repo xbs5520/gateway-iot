@@ -22,7 +22,6 @@ cert/*.key
 
 # Configuration (may contain secrets)
 config.json.local
-aws_config.h
 
 # Events and logs
 events/*.jpg

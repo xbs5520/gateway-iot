@@ -29,6 +29,15 @@ jobs:
             libmosquitto-dev \
             libcjson-dev \
             libgtest-dev
+            
+      # create fake cert
+      - name: Setup certificates
+        run: |
+          mkdir -p cert
+          touch cert/imx_ca.pem
+          touch cert/imx_cert.pem
+          touch cert/imx_key.pem
+
       # build
       - name: Build
         run: |
