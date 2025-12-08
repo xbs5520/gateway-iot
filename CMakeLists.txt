@@ -13,5 +13,15 @@ pkg_check_modules(CJSON REQUIRED libcjson)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#gtest
+enable_testing()
+find_package(GTest REQUIRED)
+include(GoogleTest)
+
 #resource
 add_subdirectory(src)
+
+# copy default config to build
+configure_file(${CMAKE_SOURCE_DIR}/config.json ${CMAKE_BINARY_DIR}/config.json COPYONLY)
+
+add_subdirectory(tests)

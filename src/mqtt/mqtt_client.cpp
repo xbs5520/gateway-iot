@@ -122,7 +122,11 @@ std::string MQTTClient::eventToJSON(const Event& event)
         cJSON_AddStringToObject(data, key.c_str(), value.c_str());
     }
     cJSON_AddItemToObject(root, "data", data);
-    string res = cJSON_PrintUnformatted(root);
+    // memory leak
+    // string res = cJSON_PrintUnformatted(root);
+    char* json_str = cJSON_PrintUnformatted(root);
+    std::string res(json_str);
+    free(json_str);
     cJSON_Delete(root);
     return res;
 }

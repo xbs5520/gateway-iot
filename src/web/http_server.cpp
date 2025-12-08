@@ -99,7 +99,7 @@ void HTTPServer::setupRoutes()
         res.set_content(json, "application/json");
     });
     
-    // 4. 获取缩略图
+    // 4. thumbnail
     m_server->Get("/api/thumbnail/(.*)", [this](const httplib::Request& req, httplib::Response& res) 
     {
         // req.matches[1] 是正则匹配到的文件名部分
