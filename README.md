@@ -6,6 +6,10 @@ Gateway IoT is a C++17-based smart video surveillance system that enables real-t
 
 This project helps you quickly build a scalable, configurable, and cloud-ready video gateway for smart home, industrial monitoring, or IoT edge scenarios. Designed for easy integration with AWS IoT and web dashboards
 
+## 🎉 Recent Updates
+
+8 Dec 2025 - Phase 0 Complete ✅
+
 ## Demo
 
 ### build
@@ -148,6 +152,34 @@ All settings managed via `config.json`:
 
 Or use web interface: `http://localhost:8080/config.html`
 
+## Development Tools
+
+### Code Coverage Report
+
+Generate code coverage report with lcov:
+
+```bash
+./scripts/coverage.sh
+```
+
+View report: `build-coverage/coverage_html/index.html`
+
+### Static Code Analysis
+
+Run cppcheck static analysis:
+
+```bash
+./scripts/static_analysis.sh
+```
+
+### CI/CD
+
+GitHub Actions automatically runs on every push:
+
+- ✅ Build compilation
+- ✅ Run unit tests
+- 📊 Check results in Actions tab
+
 ## Installation
 
 ### 1.Install Dependencies
@@ -243,7 +275,7 @@ Solution:
 
 **Plan:**
 
-### Phase 0: Foundation & Documentation
+### Phase 0: Foundation & Documentation ✅
 - 📝 OpenAPI 3.0 specification with Swagger UI
 - 🧪 Google Test framework integration
 - 🔄 CI/CD pipeline with GitHub Actions
