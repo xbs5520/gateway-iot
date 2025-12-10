@@ -1,4 +1,7 @@
 #include "./mqtt_client.h"
+#include "../../external/json.hpp"
+
+using json = nlohmann::json;
 
 MQTTClient::MQTTClient()
 {
@@ -112,23 +115,13 @@ void MQTTClient::stopPublish()
 
 std::string MQTTClient::eventToJSON(const Event& event)
 {
-    cJSON *root = cJSON_CreateObject();
-    cJSON_AddStringToObject(root, "type", event.type.c_str());
-    cJSON_AddNumberToObject(root, "timestamp", event.timestamp);
-    cJSON_AddStringToObject(root, "thumbnail", event.thumbnail.c_str());
-    cJSON *data = cJSON_CreateObject();
-    for(const auto& [key, value] : event.data)
-    {
-        cJSON_AddStringToObject(data, key.c_str(), value.c_str());
-    }
-    cJSON_AddItemToObject(root, "data", data);
-    // memory leak
-    // string res = cJSON_PrintUnformatted(root);
-    char* json_str = cJSON_PrintUnformatted(root);
-    std::string res(json_str);
-    free(json_str);
-    cJSON_Delete(root);
-    return res;
+    json root = {
+        {"type", event.type},
+        {"timestamp", event.timestamp},
+        {"thumbnail", event.thumbnail},
+        {"data", event.data}
+    };
+    return root.dump();
 }
 
 void MQTTClient::publishThread()

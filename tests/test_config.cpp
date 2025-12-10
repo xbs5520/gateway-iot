@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "config/config.h"
-#include <cjson/cJSON.h>
+#include "../external/json.hpp"
+
+using json = nlohmann::json;
 
 TEST(ConfigTest, LoadValidJson) 
 {
@@ -13,11 +15,11 @@ TEST(ConfigTest, GetConfig)
     Config& cfg = Config::getInstance();
     cfg.load("test_config.json");
     
-    cJSON* node = cfg.getConfig("test_section");
-    EXPECT_NE(node, nullptr);
+    json node = cfg.getConfig("test_section");
+    EXPECT_FALSE(node.is_null());
     
-    cJSON* value = cJSON_GetObjectItem(node, "value");
-    EXPECT_EQ(value->valueint, 2431);
+    EXPECT_TRUE(node.contains("value"));
+    EXPECT_EQ(node["value"].get<int>(), 2431);
 }
 
 TEST(ConfigTest, SetConfig) 
@@ -25,16 +27,13 @@ TEST(ConfigTest, SetConfig)
     Config& cfg = Config::getInstance();
     cfg.load("test_config.json");
     
-    cJSON* new_config = cJSON_CreateObject();
-    cJSON_AddNumberToObject(new_config, "value", 456);
+    json new_config = {{"value", 456}};
     
     EXPECT_TRUE(cfg.setConfig("test_section", new_config));
     
-    cJSON* updated = cfg.getConfig("test_section");
-    cJSON* value = cJSON_GetObjectItem(updated, "value");
-    EXPECT_EQ(value->valueint, 456);
-    
-    cJSON_Delete(new_config);
+    json updated = cfg.getConfig("test_section");
+    EXPECT_TRUE(updated.contains("value"));
+    EXPECT_EQ(updated["value"].get<int>(), 456);
 }
 
 TEST(ConfigTest, SetAndSave) 
@@ -42,8 +41,7 @@ TEST(ConfigTest, SetAndSave)
     Config& cfg = Config::getInstance();
     cfg.load("test_config.json");
     
-    cJSON* new_config = cJSON_CreateObject();
-    cJSON_AddNumberToObject(new_config, "value", 999);
+    json new_config = {{"value", 999}};
     cfg.setConfig("test_section", new_config);
     
     // save
@@ -52,9 +50,7 @@ TEST(ConfigTest, SetAndSave)
     // check
     Config& cfg2 = Config::getInstance();
     cfg2.load("test_config.json");
-    cJSON* reloaded = cfg2.getConfig("test_section");
-    cJSON* value = cJSON_GetObjectItem(reloaded, "value");
-    EXPECT_EQ(value->valueint, 999);
-    
-    cJSON_Delete(new_config);
+    json reloaded = cfg2.getConfig("test_section");
+    EXPECT_TRUE(reloaded.contains("value"));
+    EXPECT_EQ(reloaded["value"].get<int>(), 999);
 }

@@ -5,10 +5,13 @@
 #include <thread>
 #include <atomic>
 #include <chrono>
-#include <cjson/cJSON.h>
+#include "../../external/json.hpp"
 #include "../rtsp/rtsp_client.h"
 #include "../event/event_manager.h"
 #include "../config/config.h"
+
+using json = nlohmann::json;
+
 class MotionDetector 
 {
 public:
@@ -18,8 +21,8 @@ public:
     void startDetection(RTSPClient* client, EventManager* eventMgr);
     void stopDetection();
 
-    bool configVerifyDetector(cJSON* config);
-    void onConfigDetector(cJSON* config);
+    bool configVerifyDetector(const json& config);
+    void onConfigDetector(const json& config);
 
 private:
     void detectThread();

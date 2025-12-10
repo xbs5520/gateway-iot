@@ -34,11 +34,10 @@ int main(int argc, char* argv[])
     } 
     else 
     {
-        cJSON* rtsp_config = config.getConfig("rtsp");
-        if (rtsp_config) 
+        json rtsp_config = config.getConfig("rtsp");
+        if (!rtsp_config.is_null() && rtsp_config.contains("url") && rtsp_config["url"].is_string()) 
         {
-            cJSON* url = cJSON_GetObjectItem(rtsp_config, "url");
-            rtsp_url = url ? url->valuestring : "rtsp://127.0.0.1:8554/test";
+            rtsp_url = rtsp_config["url"].get<std::string>();
         } 
         else 
         {

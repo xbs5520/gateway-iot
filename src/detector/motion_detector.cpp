@@ -9,8 +9,8 @@ MotionDetector::MotionDetector()
     Config::getInstance().registerOnConfig("detector", this, &MotionDetector::onConfigDetector);
     
     // init config
-    cJSON* config = Config::getInstance().getConfig("detector");
-    if (config) 
+    json config = Config::getInstance().getConfig("detector");
+    if (!config.is_null()) 
     {
         onConfigDetector(config);  // init
     } 
@@ -91,19 +91,18 @@ void MotionDetector::detectThread()
     }
 }
 
-bool MotionDetector::configVerifyDetector(cJSON* config)
+bool MotionDetector::configVerifyDetector(const json& config)
 {
-    if (!config) 
+    if (config.is_null()) 
     {
         printf("[Detector] Config is null\n");
         return false;
     }
     
     // verify motion_level
-    cJSON* level = cJSON_GetObjectItem(config, "motion_level");
-    if (level && cJSON_IsNumber(level)) 
+    if (config.contains("motion_level") && config["motion_level"].is_number()) 
     {
-        int val = level->valueint;
+        int val = config["motion_level"].get<int>();
         if (val < 1 || val > 10) 
         {
             printf("[Detector] level out of range: %d (valid: 1-10)\n", val);
@@ -112,10 +111,9 @@ bool MotionDetector::configVerifyDetector(cJSON* config)
     }
     
     // verify debounce
-    cJSON* debounce = cJSON_GetObjectItem(config, "debounce");
-    if (debounce && cJSON_IsNumber(debounce)) 
+    if (config.contains("debounce") && config["debounce"].is_number()) 
     {
-        int val = debounce->valueint;
+        int val = config["debounce"].get<int>();
         if (val < 0 || val > 60) {
             printf("[Detector] Debounce out of range: %d (valid: 0-60s)\n", val);
             return false;
@@ -126,27 +124,25 @@ bool MotionDetector::configVerifyDetector(cJSON* config)
     return true;
 }
 
-void MotionDetector::onConfigDetector(cJSON* config)
+void MotionDetector::onConfigDetector(const json& config)
 {
-    if (!config) {
+    if (config.is_null()) {
         printf("[Detector] Config is null\n");
         return;
     }
     
     // motion_threshold
-    cJSON* level = cJSON_GetObjectItem(config, "motion_level");
-    if (level && cJSON_IsNumber(level)) 
+    if (config.contains("motion_level") && config["motion_level"].is_number()) 
     {
-        m_motion_level = level->valueint;
+        m_motion_level = config["motion_level"].get<int>();
         m_motion_threshold = levelToThreshold(m_motion_level);
         printf("[Detector] Updated motion_level: %d\n", m_motion_level);
     }
 
     // debounce
-    cJSON* debounce = cJSON_GetObjectItem(config, "debounce");
-    if (debounce && cJSON_IsNumber(debounce)) 
+    if (config.contains("debounce") && config["debounce"].is_number()) 
     {
-        m_debounce_time = debounce->valueint;
+        m_debounce_time = config["debounce"].get<int>();
         printf("[Detector] Updated debounce_time: %d\n", m_debounce_time);
     }
 }

@@ -142,11 +142,9 @@ void HTTPServer::setupRoutes()
     m_server->Get("/api/config", [this](const httplib::Request&, httplib::Response& res) 
     {
         Config& cfg = Config::getInstance();
-        cJSON* root = cfg.getRoot();
-        if(root) {
-            char* json_str = cJSON_Print(root);
+        std::string json_str = cfg.toJsonString();
+        if(!json_str.empty()) {
             res.set_content(json_str, "application/json");
-            free(json_str);
         } else {
             res.status = 500;
             res.set_content("{\"error\":\"Failed to get config\"}", "application/json");
@@ -159,8 +157,10 @@ void HTTPServer::setupRoutes()
         Config& cfg = Config::getInstance();
         
         // 解析POST的JSON数据
-        cJSON* new_config = cJSON_Parse(req.body.c_str());
-        if(!new_config) {
+        json new_config;
+        try {
+            new_config = json::parse(req.body);
+        } catch (const std::exception& e) {
             res.set_content("{\"success\":false,\"error\":\"Invalid JSON\"}", "application/json");
             return;
         }
@@ -169,20 +169,12 @@ void HTTPServer::setupRoutes()
         std::string error_msg;
         
         // 遍历每个配置项并更新
-        cJSON* item = new_config->child;
-        while(item) {
-            std::string name = item->string;
-            cJSON* value = cJSON_Duplicate(item, 1);  // 深拷贝
-            
+        for (auto& [name, value] : new_config.items()) {
             if(!cfg.setConfig(name, value)) {
                 all_success = false;
                 error_msg += name + " 验证失败; ";
-                cJSON_Delete(value);
             }
-            item = item->next;
         }
-        
-        cJSON_Delete(new_config);
         
         // 保存到文件
         if(all_success) {

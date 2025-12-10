@@ -7,7 +7,6 @@ find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(FFMPEG REQUIRED libavformat libavcodec libavutil libswscale)
 pkg_check_modules(MOSQUITTO REQUIRED libmosquitto)
-pkg_check_modules(CJSON REQUIRED libcjson)
 
 #C++
 set(CMAKE_CXX_STANDARD 17)
@@ -20,6 +19,9 @@ include(GoogleTest)
 
 #resource
 add_subdirectory(src)
+
+#header
+include_directories(${CMAKE_SOURCE_DIR}/external)
 
 # copy default config to build
 configure_file(${CMAKE_SOURCE_DIR}/config.json ${CMAKE_BINARY_DIR}/config.json COPYONLY)

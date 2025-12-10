@@ -19,9 +19,8 @@ target_link_libraries(detector ${OpenCV_LIBS})
 add_library(config config/config.cpp)
 target_include_directories(config PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CJSON_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/external
 )
-target_link_libraries(config ${CJSON_LIBRARIES})
 
 #event
 add_library(event event/event_manager.cpp)
@@ -36,10 +35,10 @@ add_library(mqtt mqtt/mqtt_client.cpp)
 target_include_directories(mqtt PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${OpenCV_INCLUDE_DIRS}
-    ${CJSON_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/external
     ${MOSQUITTO_INCLUDE_DIRS}
 )
-target_link_libraries(mqtt ${MOSQUITTO_LIBRARIES} ${CJSON_LIBRARIES} )
+target_link_libraries(mqtt ${MOSQUITTO_LIBRARIES})
 
 #web
 add_library(web web/http_server.cpp)
