@@ -8,7 +8,16 @@ This project helps you quickly build a scalable, configurable, and cloud-ready v
 
 ## 🎉 Recent Updates
 
-8 Dec 2025 - Phase 0 Complete ✅
+**11 Dec 2025 - Config Module Enhancement Complete ✅**
+- ✅ Added Observer pattern removal mechanism to prevent dangling pointers
+- ✅ Implemented auto-save with dirty flag optimization (30s interval)
+- ✅ Three-stage locking design to prevent deadlock in recursive callbacks
+
+**10 Dec 2025 - Config Module Enhancement**
+- ✅ Migrated from cJSON to nlohmann/json (modern C++ JSON library)
+- ✅ Implemented thread-safe operations with reader-writer locks (std::shared_mutex)
+
+**8 Dec 2025 - Phase 0 Complete ✅**
 
 ## Demo
 

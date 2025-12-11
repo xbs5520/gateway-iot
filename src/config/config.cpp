@@ -9,6 +9,8 @@ Config& Config::getInstance()
 
 Config::~Config() 
 {
+    stopAutoSave();
+
     // clear warpper
     for (auto& pair : m_verify_funcs) 
     {
@@ -53,6 +55,12 @@ bool Config::load(const std::string& file_path)
     m_file_path = file_path;
     m_root = std::move(temp_root);
     printf("[Config] Loaded from %s\n", file_path.c_str());
+
+    // start auto save
+    if (!m_auto_save_running) {
+        lock.unlock();  // unlock first
+        startAutoSave(30);
+    }
     return true;
 }
 
@@ -117,7 +125,8 @@ bool Config::setConfig(const std::string& name, const json& config)
         
         //2. update config
         m_root[name] = config;
-        
+        m_dirty = true;
+
         // copy list
         auto callback_it = m_callback_funcs.find(name);
         if (callback_it != m_callback_funcs.end()) 
@@ -143,11 +152,68 @@ void Config::registerVerify(const std::string& name, bool (*verify_func)(const j
     printf("[Config] Registered global verify for '%s'\n", name.c_str());
 }
 
+bool Config::removeVerify(const std::string& name, bool (*verify_func)(const json&))
+{
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
+    auto it = m_verify_funcs.find(name);
+    if (it == m_verify_funcs.end()) {
+        return false;  // no find
+    }
+
+    auto& wrappers = it->second;
+    size_t old_size = wrappers.size();
+
+    wrappers.erase(
+        std::remove_if(wrappers.begin(), wrappers.end(),
+            [verify_func](VerifyWrapper* w) {
+                // find GlobalVerifyWrapper
+                auto* gw = dynamic_cast<GlobalVerifyWrapper*>(w);
+                if (gw && gw->func == verify_func) {
+                    delete w;
+                    return true;  // mark for removeif --- delete it
+                }
+                return false;
+            }),
+        wrappers.end()
+    );
+
+    return wrappers.size() < old_size;
+}
+
 void Config::registerOnConfig(const std::string& name, void (*callback_func)(const json&))
 {
     std::unique_lock<std::shared_mutex> lock(m_mutex);
     m_callback_funcs[name].push_back(new GlobalCallbackWrapper(callback_func));
     printf("[Config] Registered global callback for '%s'\n", name.c_str());
+}
+
+bool Config::removeOnConfig(const std::string& name, void (*callback_func)(const json&))
+{
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
+    
+    auto it = m_callback_funcs.find(name);
+    if (it == m_callback_funcs.end()) {
+        return false;  // no find
+    }
+    
+    auto& wrappers = it->second;
+    size_t old_size = wrappers.size();
+    
+    wrappers.erase(
+        std::remove_if(wrappers.begin(), wrappers.end(),
+            [callback_func](CallbackWrapper* w) {
+                // find GlobalCallbackWrapper
+                auto* gw = dynamic_cast<GlobalCallbackWrapper*>(w);
+                if (gw && gw->func == callback_func) {
+                    delete w;
+                    return true;  // mark for removeif --- delete it
+                }
+                return false;
+            }),
+        wrappers.end()
+    );
+    
+    return wrappers.size() < old_size;
 }
 
 std::string Config::toJsonString() 
@@ -180,4 +246,65 @@ bool Config::updateFromJson(const std::string& json_str)
         printf("[Config] Invalid JSON string: %s\n", e.what());
         return false;
     }
+}
+
+void Config::startAutoSave(int interval_seconds)
+{
+    if (m_auto_save_running) 
+    {
+        return;  // running
+    }
+    
+    m_auto_save_running = true;
+    m_auto_save_thread = std::thread([this, interval_seconds]{
+        while (m_auto_save_running) 
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(interval_seconds));
+            if (m_auto_save_running) 
+            {  // check again
+                saveIfDirty();
+            }
+        }
+    });
+}
+
+void Config::stopAutoSave()
+{
+    m_auto_save_running = false;
+    if (m_auto_save_thread.joinable()) 
+    {
+        m_auto_save_thread.join();
+    }
+    saveIfDirty();  // save
+}
+
+bool Config::saveIfDirty()
+{
+    std::unique_lock<std::shared_mutex> lock(m_mutex);
+    
+    if (!m_dirty) 
+    {
+        return true;  // no change
+    }
+    
+    // need save
+    std::string file_path = m_file_path;
+    json root_copy = m_root;
+    lock.unlock();
+    
+    // IO
+    std::ofstream file(file_path);
+    if (!file.is_open()) {
+        printf("[Config] Failed to save to %s\n", file_path.c_str());
+        return false;
+    }
+    
+    file << root_copy.dump(4);
+    printf("[Config] Auto-saved to %s\n", file_path.c_str());
+    
+    // save success clear flag
+    lock.lock();
+    m_dirty = false;
+    
+    return true;
 }

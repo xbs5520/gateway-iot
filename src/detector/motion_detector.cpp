@@ -4,7 +4,7 @@ MotionDetector::MotionDetector()
 {
     m_bg_subtractor = cv::createBackgroundSubtractorMOG2();
 
-    // register
+    // add onconfig && verify
     Config::getInstance().registerVerify("detector", this, &MotionDetector::configVerifyDetector);
     Config::getInstance().registerOnConfig("detector", this, &MotionDetector::onConfigDetector);
     
@@ -27,6 +27,9 @@ MotionDetector::MotionDetector()
 MotionDetector::~MotionDetector()
 {
     stopDetection();
+    // remove onconfig && verify
+    Config::getInstance().removeVerify("detector", this, &MotionDetector::configVerifyDetector);
+    Config::getInstance().removeOnConfig("detector", this, &MotionDetector::onConfigDetector);
 }
 
 int MotionDetector::levelToThreshold(int level)
